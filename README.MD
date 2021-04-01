@@ -17,7 +17,7 @@ We suppose, that Deep Learning methods will improve metrics for classification t
  ### Task list:
  - [ ] 1 Introduction and related works 
  - [x] 2 Experimental and Methods
- - [ ] 3 Results
+ - [x] 3 Results
  - [ ] 4 Discussion
  - [x] T-Wristband firmware
  - [x] Android application (bluetooth terminal for data acquisition)
