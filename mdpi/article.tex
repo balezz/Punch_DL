@@ -68,27 +68,26 @@ In \cite{ref-journal7}, the ANN in the form of a multilayer perceptron was devel
 In \cite{ref-journal8}, six different deep machine learning models for recognizing boxers ' punches were investigated. The IMUs were installed in two versions: (1 – the IMUs was attached to both wrists; 2 – the IMUs was attached to both wrists and the third thoracic vertebra). The accuracy of the impact prediction was: for version 1 – 0.90 ± 0.12, for version 2-0.87 ± 0.09. For version 1, the support vector machine (SVM) model worked best (accuracy = 0.96), version 2 – the multi-layer perceptron neural network (MLP-NN) model (accuracy = 0.98).\\
 Not much work is devoted to the analysis of punches in karate based on IMUs and ANN. And so far, no research has been conducted on a specific karate punch, which is called uraken in Japanese (a punch is made from the inside out).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Materials and Methods}
 \subsection{Participants}
 One healthy participant (n=1), wight = 100 kg, height = 190 cm with experience in Karate took part in the study. Ethical approval was granted by the Human Research Ethics Commitee at Financial University at Government of the Russian Federation.
-
 \subsection{Materials}
 One 6DOF Inertial Measurement Unit (IMU) T-Wristband with properties (sampling rate 50 Hz, +- 16 g linear acceleration, +- 2000 deg/s gyroscope) was used in this study. T-wristband bracelet with 252x19x12 basic dimensions, 47x18x12 host dimension, 30 g weight with custom firmware used.
 
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/IMU.jpg}
-\caption{T-wristband size}
+\caption{IMU, micro-controller and Bluetooth module}
 \end{figure} 
 
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/hand_imu.jpg}
-\caption{T-wristband host sensor was attached under on wrist}
+\caption{Box with IMU attached under bandage on wrist}
 \end{figure} 
 
 We don't use magnitometer measurements and don't calculate angles and position of sensor. We use only linear acceleration and gyroscope measurements.
 
 To record session we use Xiaomi Redmi 7 camera with 1980x1080 resolution 30 fps. Video analysis was used to labeling ground truth punches. To record data we use Bluetooth Serial Terminal Android application.
-
 \subsection{Methods}
 Data collection session consist of the participant performing 1912 punches to makivara.
 
@@ -152,6 +151,7 @@ $N_FP$ - number of false positive classified punches, $P$ - precision, $R$ - rec
 Models was trained using PC with Ubuntu 18.04 LTS, Intel(E) Core(TM) i7-6950x CPU, 64 GB RAM, GTX 1080ti 8 GB GPU. Total time about 4 hours.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Results}
 
 This section may be divided by subheadings. It should provide a concise and precise description of the experimental results, their interpretation as well as the experimental conclusions that can be drawn.
@@ -163,18 +163,16 @@ Multy layer perceptron consist of 5 sequential layers with hidden size (450, 102
 100 epochs training history and confusion matrix are on figure.
 
 
-
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/mlp_train_log.png}
 \caption{MLP training history}
 \end{figure} 
 
-
-Classification metrics are on the table.
+Classification metrics are on the table 1.
 
 \begin{specialtable}[H] 
-\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab1}}
-
+\caption{MLP classification metrics.}
+\label{tab1}
 \begin{tabular}{cccc}
 \toprule
 \textbf{Punch class}	& \textbf{precision}	& \textbf{recall}	& \textbf{F1-score}\\
@@ -188,7 +186,7 @@ NP		& 0.85		& 0.87		& 0.86\\
 \end{tabular}
 \end{specialtable}
 
-Confusion matrix is on figure
+Confusion matrix is on figure 7.
 
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/mlp_confus.png}
@@ -202,20 +200,20 @@ To avoid this we try more complex model - 1D convolution network.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{1D Convolution Net}
-1-dimension Convolution Net consist of 3 separate layers with 64 kernels each and relu activations. 
+\subsection{1D Convolution Network}
+1-dimension Convolution Network consist of 3 separate layers with 64 kernels each and relu activations. 
 Optimizer is Adam, learning rate = 2e-3 and batch size 64.
 100 epochs training history and confusion matrix are on figure.
 
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/1conv_train_log.png}
-\caption{MLP training history}
+\caption{1D CNN training history}
 \end{figure} 
 
 Classification metrics are on the table 2.
 
 \begin{specialtable}[H] 
-\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab2}}
+\caption{1D CNN classification metrics\label{tab2}}
 \begin{tabular}{cccc}
 \toprule
 \textbf{Punch class}	& \textbf{precision}	& \textbf{recall}	& \textbf{F1-score}\\
@@ -231,7 +229,7 @@ NP		& 0.83		& 0.79		& 0.81 \\
 
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/1conv_confus.png}
-\caption{MLP confusion matrix}
+\caption{1D CNN confusion matrix}
 \end{figure} 
 
 On training history we see small train accuracy, unstable validation accuracy and big loss.
@@ -240,20 +238,20 @@ So, we try the model with 2D convolution layers.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{2D Convolution Net}
-2-dimension Convolution Net consist of 2 layers, that inputs are both x,y and y,z axis. Layers has  72 and 88 kernels, size (2, 52), batch normalization and relu activations. 
+\subsection{2D Convolution Network}
+2-dimension Convolution Network consist of 2 layers, that inputs are both x,y and y,z axis. Layers has  72 and 88 kernels, size (2, 52), batch normalization and relu activations. 
 Optimizer is Adam, learning rate = 2e-3 and batch size 64.
 100 epochs training history and confusion matrix are on figure.
 
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/2conv_train_log.png}
-\caption{MLP training history}
+\caption{2D CNN training history}
 \end{figure} 
 
 Classification metrics are on the table 3.
 
 \begin{specialtable}[H] 
-\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab3}}
+\caption{2D CNN classification metrics.\label{tab3}}
 \begin{tabular}{cccc}
 \toprule
 \textbf{Punch class}	&\textbf{precision}	& \textbf{recall}	& \textbf{F1-score}\\
@@ -269,7 +267,7 @@ NP		& 0.97		& 0.87		& 0.92 \\
 
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/2conv_confus.png}
-\caption{MLP confusion matrix}
+\caption{2D CNN confusion matrix}
 \end{figure} 
 
 
@@ -278,21 +276,21 @@ But can we try deeper model with 4 2D convolution layers?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{2D Convolution Net with 4 layers}
+\subsection{2D Convolution Network with 4 layers}
 
-2-dimension Convolution Net consist of 2 layers, that inputs are both x,y and y,z axis. Layers has  72 and 88 kernels, size (2, 52), batch normalization and relu activations. 
+2-dimension Convolution Network consist of 4 layers, that inputs are both x,y and y,z axis. First layer has 32 kernels with size (2, 32), other layers has 64, 64 and 96 (2, 2) size kernels. Batch normalization and relu activations also used. 
 Optimizer is Adam, learning rate = 2e-3 and batch size 64.
 100 epochs training history and confusion matrix are on figure.
 
 \begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/2conv_train_log.png}
-\caption{MLP training history}
+\includegraphics[width=10.5 cm]{img/4conv_train_log.png}
+\caption{2D 4 layer CNN training history}
 \end{figure} 
 
 Classification metrics are on the table 4.
 % The MDPI table float is called specialtable
 \begin{specialtable}[H] 
-\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab4}}
+\caption{2D 4 layer CNN classification metrics.\label{tab4}}
 %%% \tablesize{} %% You can specify the fontsize here, e.g., \tablesize{\footnotesize}. If commented out \small will be used.
 \begin{tabular}{cccc}
 \toprule
@@ -308,15 +306,14 @@ NP		& 0.97		& 0.87		& 0.92 \\
 \end{specialtable}
 
 \begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/2conv_confus.png}
-\caption{MLP confusion matrix}
+\includegraphics[width=10.5 cm]{img/4conv_confus.png}
+\caption{2D 4 layer CNN confusion matrix}
 \end{figure} 
 
-
 On training history we see much better train and validation accuracy, small loss.
-But can we try deeper model with 4 2D convolution layers?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Discussion}
 Multilayer perceptron is a simple model and good baseline. Best F1 score is 0.95 for U-punch, worst is 0.86 for N-punch. Difference between train and validation accuracy is rusult of model overfiiting.
 Increasing number of training samples will solve this problem.\\
@@ -324,6 +321,7 @@ Increasing number of training samples will solve this problem.\\
 As we proposed, 2D convolution model with 2 conv layers works better. Metrics are like on mlp: best F1 is 0.93 for YT-punch and worst is 0.90 for U-punch class. A little gap between training and validation accuracy curves is tell about some overfitting, so we tested deeper conv model with 4 layers.\\
 2D convolution model with 4 conv layer shows best result: 0.97 validation accuracy. Best F1-score 0.99 for YT-punch class, worst 0.90 for AT-punch class.\\
 Comparing with MLP, we achieved better classification metrics and shift invariant model, based on 2D convolution. 
+
 \section{Conclusions}
 Comparing with classic ML prediction methods, neural nets have a little smaller F1-score, but higher accuracy. 
 
@@ -366,36 +364,21 @@ actively participating in the study.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
 \abbreviations{The following abbreviations are used in this manuscript:\\
-
-\noindent 
+%\noindent 
 \begin{tabular}{@{}ll}
-MDPI & Multidisciplinary Digital Publishing Institute\\
-DOAJ & Directory of open access journals\\
-TLA & Three letter acronym\\
-LD & Linear dichroism
+IMU & Inertial Measurement Unit \\
+MLP & Multi-layer Perceptron \\
+CNN & Convolution Neural Network
 \end{tabular}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
-\appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
-\appendixstart
-\appendix
+%\appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
+%\appendixstart
+%\appendix
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \reftitle{References}
-
-% Please provide either the correct journal abbreviation (e.g. according to the “List of Title Word Abbreviations” http://www.issn.org/services/online-services/access-to-the-ltwa/) or the full name of the journal.
-% Citations and References in Supplementary files are permitted provided that they also appear in the reference list here. 
-
-%=====================================
-% References, variant A: external bibliography
-%=====================================
-%\externalbibliography{yes}
-%\bibliography{your_external_BibTeX_file}
-
-%=====================================
-% References, variant B: internal bibliography
-%=====================================
 \begin{thebibliography}{999}
 
 \bibitem[Polak(2016)]{ref-journal1}
@@ -432,4 +415,5 @@ Worsey, M.T.O.; Espinosa, H.G.; Shepherd, J.B.; Thiel, D.V. An Evaluation of Wea
 %Reviewer 3 comments and authors’ response
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \end{document}
