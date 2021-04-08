@@ -138,10 +138,10 @@ where $N_T$ - number of true classified punch,
 $N$ - total number of punches.\\
 Precision, recall and F1-score were used as a classification metrics for single classes:
 \begin{equation}
-P = \frac{N_TP}{N_TP + N_FP}
+P = \frac{N_{TP}}{N_{TP} + N_{FP}}
 \end{equation}
 \begin{equation}
-R = \frac{N_TP}{N_TP + N_FN}
+R = \frac{N_{TP}}{N_{TP} + N_{FN}}
 \end{equation}
 \begin{equation}
 F1 = 2 \cdot \frac{P \cdot R}{P + R}
@@ -296,11 +296,11 @@ Classification metrics are on the table 4.
 \toprule
 \textbf{Punch class}	& \textbf{precision}	& \textbf{recall}	& \textbf{F1-score}\\
 \midrule
-YT		& 0.87		& 1.00		& 0.93 \\
-MT		& 0.85		& 0.96		& 0.90 \\
+YT		& 0.94		& 1.00		& 0.97 \\
+MT		& 0.84		& 1.00		& 0.97 \\
 AT		& 0.97		& 0.85		& 0.90 \\
-U		& 0.95		& 0.85		& 0.90 \\
-NP		& 0.97		& 0.87		& 0.92 \\
+U		& 0.98		& 1.00		& 0.99 \\
+NP		& 0.97		& 0.89		& 0.93 \\
 \bottomrule
 \end{tabular}
 \end{specialtable}
