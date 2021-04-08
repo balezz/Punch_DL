@@ -15,7 +15,7 @@ We suppose, that Deep Learning methods will improve metrics for classification t
  Supports IMU reading, but have no bluetooth channel connection.
  
  ### Task list:
- - [ ] 1 Introduction and related works 
+ - [x] 1 Introduction and related works 
  - [x] 2 Experimental and Methods
  - [x] 3 Results
  - [ ] 4 Discussion
