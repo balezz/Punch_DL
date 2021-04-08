@@ -130,19 +130,26 @@ In experiments takes part 4 models:
 \item	2 dimension convolution network with 4 layers.
 \end{enumerate}
 
-Multiclass Accuracy used as a classification metric:
+Multiclass Accuracy used as a classification metric for all classes:
 \begin{equation}
 ACC = \frac{N_T}{N}
 \end{equation}
 
 where $N_T$ - number of true classified punch,  
-$N$ - total number of punches.
-
+$N$ - total number of punches.\\
+Precision, recall and F1-score were used as a classification metrics for single classes:
+\begin{equation}
+P = \frac{N_TP}{N_TP + N_FP}
+\end{equation}
+\begin{equation}
+R = \frac{N_TP}{N_TP + N_FN}
+\end{equation}
+\begin{equation}
+F1 = 2 \cdot \frac{P \cdot R}{P + R}
+\end{equation}
+where $N_TP$ - number of true positive classified punch,  
+$N_FP$ - number of false positive classified punches, $P$ - precision, $R$ - recall, $F1$ - F1 - score.\\
 Models was trained using PC with Ubuntu 18.04 LTS, Intel(E) Core(TM) i7-6950x CPU, 64 GB RAM, GTX 1080ti 8 GB GPU. Total time about 4 hours.
-
-\begin{quote}
-This is an example of a quote.
-\end{quote}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -205,15 +212,10 @@ Optimizer is Adam, learning rate = 2e-3 and batch size 64.
 \caption{MLP training history}
 \end{figure} 
 
-\begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/1conv_confus.png}
-\caption{MLP confusion matrix}
-\end{figure} 
-
-Classification metrics are on the table.
+Classification metrics are on the table 2.
 
 \begin{specialtable}[H] 
-\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab1}}
+\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab2}}
 \begin{tabular}{cccc}
 \toprule
 \textbf{Punch class}	& \textbf{precision}	& \textbf{recall}	& \textbf{F1-score}\\
@@ -226,6 +228,11 @@ NP		& 0.83		& 0.79		& 0.81 \\
 \bottomrule
 \end{tabular}
 \end{specialtable}
+
+\begin{figure}[H]
+\includegraphics[width=10.5 cm]{img/1conv_confus.png}
+\caption{MLP confusion matrix}
+\end{figure} 
 
 On training history we see small train accuracy, unstable validation accuracy and big loss.
 This means, that 1D conv model is unsuitable for punch classification.
@@ -243,14 +250,10 @@ Optimizer is Adam, learning rate = 2e-3 and batch size 64.
 \caption{MLP training history}
 \end{figure} 
 
-\begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/2conv_confus.png}
-\caption{MLP confusion matrix}
-\end{figure} 
+Classification metrics are on the table 3.
 
-Classification metrics are on the table.
 \begin{specialtable}[H] 
-\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab1}}
+\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab3}}
 \begin{tabular}{cccc}
 \toprule
 \textbf{Punch class}	&\textbf{precision}	& \textbf{recall}	& \textbf{F1-score}\\
@@ -263,6 +266,12 @@ NP		& 0.97		& 0.87		& 0.92 \\
 \bottomrule
 \end{tabular}
 \end{specialtable}
+
+\begin{figure}[H]
+\includegraphics[width=10.5 cm]{img/2conv_confus.png}
+\caption{MLP confusion matrix}
+\end{figure} 
+
 
 On training history we see much better train and validation accuracy, small loss.
 But can we try deeper model with 4 2D convolution layers?
@@ -280,16 +289,10 @@ Optimizer is Adam, learning rate = 2e-3 and batch size 64.
 \caption{MLP training history}
 \end{figure} 
 
-\begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/2conv_confus.png}
-\caption{MLP confusion matrix}
-\end{figure} 
-
-Classification metrics are on the table.
-
+Classification metrics are on the table 4.
 % The MDPI table float is called specialtable
 \begin{specialtable}[H] 
-\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab1}}
+\caption{This is a table caption. Tables should be placed in the main text near to the first time they are~cited.\label{tab4}}
 %%% \tablesize{} %% You can specify the fontsize here, e.g., \tablesize{\footnotesize}. If commented out \small will be used.
 \begin{tabular}{cccc}
 \toprule
@@ -303,6 +306,12 @@ NP		& 0.97		& 0.87		& 0.92 \\
 \bottomrule
 \end{tabular}
 \end{specialtable}
+
+\begin{figure}[H]
+\includegraphics[width=10.5 cm]{img/2conv_confus.png}
+\caption{MLP confusion matrix}
+\end{figure} 
+
 
 On training history we see much better train and validation accuracy, small loss.
 But can we try deeper model with 4 2D convolution layers?
@@ -331,24 +340,24 @@ Comparing with classic ML prediction methods, neural nets have a little smaller 
 % \supplementary{The following are available at \linksupplementary{s1}, Figure S1: title, Table S1: title, Video S1: title. A supporting video article is available at doi: link.} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.'', please turn to the  \href{http://img.mdpi.org/data/contributor-role-instruction.pdf}{CRediT taxonomy} for the term explanation. Authorship must be limited to those who have contributed substantially to the work~reported.}
+%\authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.'', please turn to the  \href{http://img.mdpi.org/data/contributor-role-instruction.pdf}{CRediT taxonomy} for the term explanation. Authorship must be limited to those who have contributed substantially to the work~reported.}
 
 \funding{This research received no external funding.}
 
-\institutionalreview{The study was conducted according to the guidelines of the Declaration of Helsinki, and approved by the Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE (protocol code XXX and date of approval).'' OR ``Ethical review and approval were waived for this study, due to REASON (please provide a detailed justification).'' OR ``Not applicable'' for studies not involving humans or animals. You might also choose to exclude this statement if the study did not involve humans or animals.}
+\institutionalreview{The study was conducted according to the guidelines of the Declaration of Helsinki, and approved by the Institutional Review Board (or Ethics Committee) of Financial University under the Government of the Russian Federation.}
 
-\informedconsent{Any research article describing a study involving humans should contain this statement. Please add ``Informed consent was obtained from all subjects involved in the study.'' OR ``Patient consent was waived due to REASON (please provide a detailed justification).'' OR ``Not applicable'' for studies not involving humans. You might also choose to exclude this statement if the study did not involve humans.
+\informedconsent{Informed consent was obtained from all subjects involved in the study.}
 
-Written informed consent for publication must be obtained from participating patients who can be identified (including by the patients themselves). Please state ``Written informed consent has been obtained from the patient(s) to publish this paper'' if applicable.}
+%\dataavailability{In this section, please provide details regarding where data supporting reported results can be found, including links to publicly archived datasets analyzed or generated during the study. Please refer to suggested Data Availability Statements in section ``MDPI Research Data Policies'' at \url{https://www.mdpi.com/ethics}. You might choose to exclude this statement if the study did not report any data.} 
 
-\dataavailability{In this section, please provide details regarding where data supporting reported results can be found, including links to publicly archived datasets analyzed or generated during the study. Please refer to suggested Data Availability Statements in section ``MDPI Research Data Policies'' at \url{https://www.mdpi.com/ethics}. You might choose to exclude this statement if the study did not report any data.} 
+\acknowledgments{The author would like to thank athletes, coaches, and the leadership of the
+Karate Federation of the Republic of Tatarstan (Kazan, Russia) for organizing the experiments and
+actively participating in the study.}
 
-\acknowledgments{In this section you can acknowledge any support given which is not covered by the author contribution or funding sections. This may include administrative and technical support, or donations in kind (e.g., materials used for experiments).}
-
-\conflictsofinterest{Declare conflicts of interest or state ``The authors declare no conflict of interest.'' Authors must identify and declare any personal circumstances or interest that may be perceived as inappropriately influencing the representation or interpretation of reported research results. Any role of the funders in the design of the study; in the collection, analyses or interpretation of data; in the writing of the manuscript, or in the decision to publish the results must be declared in this section. If there is no role, please state ``The funders had no role in the design of the study; in the collection, analyses, or interpretation of data; in the writing of the manuscript, or in the decision to publish the~results''.} 
+\conflictsofinterest{The authors declare no conflict of interest.} 
 
 %% Optional
-\sampleavailability{Samples of the compounds ... are available from the authors.}
+%\sampleavailability{Samples of the compounds ... are available from the authors.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Only for journal Encyclopedia
@@ -424,4 +433,3 @@ Worsey, M.T.O.; Espinosa, H.G.; Shepherd, J.B.; Thiel, D.V. An Evaluation of Wea
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
-
