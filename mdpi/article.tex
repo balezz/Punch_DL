@@ -1,13 +1,13 @@
-%  LaTeX support: latex@mdpi.com 
+%  LaTeX support: latex@mdpi.com
 %  For support, please attach all files needed for compiling as well as the log file, and specify your operating system, LaTeX version, and LaTeX editor.
 
 %=================================================================
-\documentclass[sport,article,submit,moreauthors,pdftex]{Definitions/mdpi} 
+\documentclass[sport,article,submit,moreauthors,pdftex]{Definitions/mdpi}
 %=================================================================
 % MDPI internal commands
-\firstpage{1} 
-\makeatletter 
-\setcounter{page}{\@firstpage} 
+\firstpage{1}
+\makeatletter
+\setcounter{page}{\@firstpage}
 \makeatother
 \pubvolume{1}
 \issuenum{1}
@@ -15,9 +15,9 @@
 \pubyear{2021}
 \copyrightyear{2021}
 %\externaleditor{Academic Editor: Firstname Lastname} % For journal Automation, please change Academic Editor to "Communicated by"
-\datereceived{} 
-\dateaccepted{} 
-\datepublished{} 
+\datereceived{}
+\dateaccepted{}
+\datepublished{}
 \hreflink{https://doi.org/} % If needed use \linebreak
 %------------------------------------------------------------------
 % The following line should be uncommented if the LaTeX file is uploaded to arXiv.org
@@ -53,7 +53,7 @@ $^{2}$ \quad Financial University under the Government of the Russian Federation
 $^{3}$ \quad Financial University under the Government of the Russian Federation; dabalashov@fa.ru }
 \abstract{(1) Background: place the question addressed in a broad context and highlight the purpose of the study; (2) Methods: describe briefly the main methods or treatments applied; (3) Results: summarize the article's main findings; (4) Conclusion: indicate the main conclusions or interpretations. The abstract should be an objective representation of the article, it must not contain results which are not presented and substantiated in the main text and should not exaggerate the main conclusions.}
 % Keywords
-\keyword{punch; classification; sensors; neural networks (List three to ten pertinent keywords specific to the article; yet reasonably common within the subject discipline.)} 
+\keyword{punch; classification; sensors; neural networks (List three to ten pertinent keywords specific to the article; yet reasonably common within the subject discipline.)}
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -70,63 +70,95 @@ Not much work is devoted to the analysis of punches in karate based on IMUs and 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Materials and Methods}
+
 \subsection{Participants}
-One healthy participant (n=1), wight = 100 kg, height = 190 cm with experience in Karate took part in the study. Ethical approval was granted by the Human Research Ethics Commitee at Financial University at Government of the Russian Federation.
+The study involved sixteen healthy participants (n=16), 12 men, 4 women, aged 22±3 years, weighing = 70±14 kg, height = 165±21 cm with 3-7 years of experience in karate. Ethical approval was granted by the Human Research 76 Ethics Commitee at Financial University under the Government of the Russian Federation.
+
 \subsection{Materials}
-One 6DOF Inertial Measurement Unit (IMU) T-Wristband with properties (sampling rate 50 Hz, +- 16 g linear acceleration, +- 2000 deg/s gyroscope) was used in this study. T-wristband bracelet with 252x19x12 basic dimensions, 47x18x12 host dimension, 30 g weight with custom firmware used.
+The design of the experiment can be seen in Figure 1.
 
 \begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/IMU.jpg}
-\caption{IMU, micro-controller and Bluetooth module}
-\end{figure} 
+\includegraphics[width=10.5 cm]{img/experiment_design.png}
+\caption{Design of the experiment}
+\end{figure}
+
+On the wrists of the athletes were fixed devices, which included a microcontroller, IMUs, and Bluetooth modules. Athletes punched in shadow fight mode. The IMUs (accelerometer and gyroscope) data was initially transmitted via the Bluetooth channel to the android device. On the android device, the data was saved as files for each type of punch. This data was then processed on the computer. In order to label and identify each punch for develop models of the artificial network, video recordings of the experiments were made.
+The data acquisition device (Figure 2) was a 50x20x10 mm box containing three modules – the microcontroller stm32f103 [9], IMU MPU9250 [10], and Bluetooth module HC-05 with a BC417143 chip [*].
 
 \begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/hand_imu.jpg}
-\caption{Box with IMU attached under bandage on wrist}
-\end{figure} 
+\includegraphics[width=10.5 cm]{img/IMU.png}
+\caption{Data acquisition device}
+\end{figure}
+
+Figure 3 shows that the IMU device was attached to the athlete's wrist with boxing bandages. Figure 3 also shows the directions of the acceleration axes and the angular velocity of the gyroscope.
+
+\begin{figure}[H]
+\includegraphics[width=10.5 cm]{img/bandage.png}
+\caption{Measuring module attached to the arm with a boxing hand wrap}
+\end{figure}
 
 We don't use magnitometer measurements and don't calculate angles and position of sensor. We use only linear acceleration and gyroscope measurements.
 
 To record session we use Xiaomi Redmi 7 camera with 1980x1080 resolution 30 fps. Video analysis was used to labeling ground truth punches. To record data we use Bluetooth Serial Terminal Android application.
-\subsection{Methods}
-Data collection session consist of the participant performing 1912 punches to makivara.
+
+Data collection session consist of the participant performing 1912 punches in shadow fight mode
 
 Class of punches are:
+
 \begin{enumerate}
-\item	Yun Tsuki (YT); 
+\item	Yun Tsuki (YT);
 \item	Mawashi Tsuki (MT);
 \item	Age Tsuki (AT);
 \item	Uraken (U);
 \item	No Punch (NP).
 \end{enumerate}
 
+In Figures 4-7, the red arrow shows the approximate trajectories of the punches
+
 \begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/punch_names.jpg}
-\caption{Punch classes}
-\end{figure} 
+\includegraphics[width=10.5 cm]{img/YT.png}
+\caption{Yun Tsuki (YT)}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=10.5 cm]{img/MT.png}
+\caption{Mawashi Tsuki (MT)}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=10.5 cm]{img/AT.png}
+\caption{Age Tsuki (AT)}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=10.5 cm]{img/U.png}
+\caption{Uraken (U}
+\end{figure}
+
+\subsection{Methods}
 
 Measured data was packed to dataset X: every sample has 3 columns (x, y, z acceleration).
 
-Train / validation random splitting was made with 10:1 propotional for each class.
+Train / validation random splitting was made with 10:1 propotional for each class. Histogram of classes samples distribution on the Figure 8.
 
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/train_test_data.png}
 \caption{Train and test samples}
-\end{figure} 
+\end{figure}
 
- Data preprocessing was conducted with python 3.7 packages: numpy, sklearn. Visualisation was made with matplotlib, Neural Net models build with tensorflow.keras 2.2.  
- 
+ Data preprocessing was conducted with python 3.7 packages: numpy, sklearn. Visualisation was made with matplotlib, Neural Net models build with tensorflow.keras 2.2. Raw data for different punch classes visualized on Figure 9.
+
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/data_xyz.png}
-\caption{Measurement raw data visualized for different punch classes}
-\end{figure} 
+\caption{Measurement raw data for different punch classes}
+\end{figure}
 
 In experiments takes part 4 models:
 \begin{enumerate}
-\item	multylayer perceptron; 
+\item	multylayer perceptron;
 \item	1 dimension convolution network from scratch;
 \item	2 dimension convolution network with 2 layers;
-\item	2 dimension convolution network with 4 layers.
+\item	2 dimension convolution network with 3 layers.
 \end{enumerate}
 
 Multiclass Accuracy used as a classification metric for all classes:
@@ -134,7 +166,7 @@ Multiclass Accuracy used as a classification metric for all classes:
 ACC = \frac{N_T}{N}
 \end{equation}
 
-where $N_T$ - number of true classified punch,  
+where $N_T$ - number of true classified punch,
 $N$ - total number of punches.\\
 Precision, recall and F1-score were used as a classification metrics for single classes:
 \begin{equation}
@@ -146,83 +178,62 @@ R = \frac{N_{TP}}{N_{TP} + N_{FN}}
 \begin{equation}
 F1 = 2 \cdot \frac{P \cdot R}{P + R}
 \end{equation}
-where $N_TP$ - number of true positive classified punch,  
+where $N_TP$ - number of true positive classified punch,
 $N_FP$ - number of false positive classified punches, $P$ - precision, $R$ - recall, $F1$ - F1 - score.\\
 Models was trained using PC with Ubuntu 18.04 LTS, Intel(E) Core(TM) i7-6950x CPU, 64 GB RAM, GTX 1080ti 8 GB GPU. Total time about 4 hours.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Results}
-
-This section may be divided by subheadings. It should provide a concise and precise description of the experimental results, their interpretation as well as the experimental conclusions that can be drawn.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Simple multy layer perceptron}
-Multy layer perceptron consist of 5 sequential layers with hidden size (450, 1024, 256, 128, 5), batch normalization, sigmoid and relu activations.
-100 epochs training history and confusion matrix are on figure.
+Multy layer perceptron consist of 5 sequential layers with hidden size (450, 1024, 256, 128, 5), batch normalization, sigmoid and relu activations. After 100 epochs training we have 0.99 training and 0.87 validation accuracy. Classification metrics are on the Table 1.
 
-
-\begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/mlp_train_log.png}
-\caption{MLP training history}
-\end{figure} 
-
-Classification metrics are on the table 1.
-
-\begin{specialtable}[H] 
+\begin{specialtable}[H]
 \caption{MLP classification metrics.}
 \label{tab1}
 \begin{tabular}{cccc}
 \toprule
 \textbf{Punch class}	& \textbf{precision}	& \textbf{recall}	& \textbf{F1-score}\\
 \midrule
-YT		& 0.92		& 0.96		& 0.94\\
-MT		& 0.96		& 0.90		& 0.93\\
-AT		& 0.93		& 0.85		& 0.89\\
-U		& 0.92		& 0.98		& 0.95\\
-NP		& 0.85		& 0.87		& 0.86\\
+YT		& 0.87		& 0.93		& 0.91\\
+MT		& 0.97		& 0.90		& 0.93\\
+AT		& 0.83		& 0.90		& 0.87\\
+U		& 0.92		& 0.96		& 0.94\\
+NP		& 0.88		& 0.79		& 0.83\\
 \bottomrule
 \end{tabular}
 \end{specialtable}
 
-Confusion matrix is on figure 7.
+Confusion matrix is on Figure 10.
 
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/mlp_confus.png}
 \caption{MLP confusion matrix}
-\end{figure} 
+\end{figure}
 
-
-On training history we see difference between train and validation accuracy and small loss.
-This means, that linear model is overfitting.
-To avoid this we try more complex model - 1D convolution network.
+We see difference between train and validation accuracy, this means, that linear model is overfitting.
+To avoid this we try more complicated model - 1D convolution network.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{1D Convolution Network}
-1-dimension Convolution Network consist of 3 separate layers with 64 kernels each and relu activations. 
+1-dimension Convolution Network consist of 3 separate layers with 64 kernels each and relu activations.
 Optimizer is Adam, learning rate = 2e-3 and batch size 64.
-100 epochs training history and confusion matrix are on figure.
+After 100 epochs training we have 0.81 training and 0.62 validation accuracy. Confusion matrix is on Figure 11. Classification metrics are on the Table 2.
 
-\begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/1conv_train_log.png}
-\caption{1D CNN training history}
-\end{figure} 
-
-Classification metrics are on the table 2.
-
-\begin{specialtable}[H] 
+\begin{specialtable}[H]
 \caption{1D CNN classification metrics\label{tab2}}
 \begin{tabular}{cccc}
 \toprule
 \textbf{Punch class}	& \textbf{precision}	& \textbf{recall}	& \textbf{F1-score}\\
 \midrule
-YT		& 0.41		& 0.91		& 0.56 \\
-MT		& 0.75		& 0.06		& 0.11 \\
-AT		& 0.70		& 0.79		& 0.74 \\
-U		& 0.91		& 0.63		& 0.74 \\
-NP		& 0.83		& 0.79		& 0.81 \\
+YT		& 0.64		& 0.85		& 0.73 \\
+MT		& 0.91		& 0.63		& 0.75 \\
+AT		& 0.86		& 0.75		& 0.81 \\
+U		& 0.85		& 0.98		& 0.91 \\
+NP		& 0.86		& 0.79		& 0.82 \\
 \bottomrule
 \end{tabular}
 \end{specialtable}
@@ -230,37 +241,29 @@ NP		& 0.83		& 0.79		& 0.81 \\
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/1conv_confus.png}
 \caption{1D CNN confusion matrix}
-\end{figure} 
+\end{figure}
 
-On training history we see small train accuracy, unstable validation accuracy and big loss.
-This means, that 1D conv model is unsuitable for punch classification.
-So, we try the model with 2D convolution layers.
+During training process we observe small train accuracy, unstable validation accuracy and big loss. This means, that 1D convolution model is unsuitable for punch classification.
+So, we try to use feature combination and model with 2D convolution layers.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{2D Convolution Network}
-2-dimension Convolution Network consist of 2 layers, that inputs are both x,y and y,z axis. Layers has  72 and 88 kernels, size (2, 52), batch normalization and relu activations. 
+2-dimension Convolution Network consist of 2 layers, that inputs are both x,y and y,z axis. Layers has  72 and 88 kernels, size (2, 52), batch normalization and relu activations.
 Optimizer is Adam, learning rate = 2e-3 and batch size 64.
-100 epochs training history and confusion matrix are on figure.
+After 100 epochs training we have 0.97 training and 0.93 validation accuracy. Confusion matrix is on the Figure 12. Classification metrics are on the Table 3.
 
-\begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/2conv_train_log.png}
-\caption{2D CNN training history}
-\end{figure} 
-
-Classification metrics are on the table 3.
-
-\begin{specialtable}[H] 
+\begin{specialtable}[H]
 \caption{2D CNN classification metrics.\label{tab3}}
 \begin{tabular}{cccc}
 \toprule
 \textbf{Punch class}	&\textbf{precision}	& \textbf{recall}	& \textbf{F1-score}\\
 \midrule
-YT		& 0.87		& 1.00		& 0.93 \\
-MT		& 0.85		& 0.96		& 0.90 \\
-AT		& 0.97		& 0.85		& 0.90 \\
-U		& 0.95		& 0.85		& 0.90 \\
-NP		& 0.97		& 0.87		& 0.92 \\
+YT		& 0.81		& 1.00		& 0.89 \\
+MT		& 1.00		& 0.94		& 0.97 \\
+AT		& 0.90		& 0.85		& 0.88 \\
+U		& 0.96		& 0.98		& 0.97 \\
+NP		& 1.00		& 0.81		& 0.90 \\
 \bottomrule
 \end{tabular}
 \end{specialtable}
@@ -268,66 +271,56 @@ NP		& 0.97		& 0.87		& 0.92 \\
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/2conv_confus.png}
 \caption{2D CNN confusion matrix}
-\end{figure} 
+\end{figure}
 
 
-On training history we see much better train and validation accuracy, small loss.
-But can we try deeper model with 4 2D convolution layers?
+We see much better train and validation accuracy, so we try deeper model with 3 2D convolution layers.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{2D Convolution Network with 4 layers}
+\subsection{2D Convolution Network with 3 layers}
 
-2-dimension Convolution Network consist of 4 layers, that inputs are both x,y and y,z axis. First layer has 32 kernels with size (2, 32), other layers has 64, 64 and 96 (2, 2) size kernels. Batch normalization and relu activations also used. 
-Optimizer is Adam, learning rate = 2e-3 and batch size 64.
-100 epochs training history and confusion matrix are on figure.
-
-\begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/4conv_train_log.png}
-\caption{2D 4 layer CNN training history}
-\end{figure} 
-
-Classification metrics are on the table 4.
+2-dimension Convolution Network consist of 3 layers, that inputs are both x,y and y,z axis. First layer has 32 kernels with size (2, 32), other layers has 64, 64 and 96 (2, 2) size kernels. Batch normalization and relu activations also used.
+Optimizer is Adam, learning rate = 2e-3 and batch size 64. After 100 epochs training we have 0.98 training and 0.96 validation accuracy. Confusion matrix is on the Figure 13. Classification metrics are on the Table 4.
 % The MDPI table float is called specialtable
-\begin{specialtable}[H] 
-\caption{2D 4 layer CNN classification metrics.\label{tab4}}
+\begin{specialtable}[H]
+\caption{2D 3 layer CNN classification metrics.\label{tab4}}
 %%% \tablesize{} %% You can specify the fontsize here, e.g., \tablesize{\footnotesize}. If commented out \small will be used.
 \begin{tabular}{cccc}
 \toprule
-\textbf{Punch class}	& \textbf{precision}	& \textbf{recall}	& \textbf{F1-score}\\
+\textbf{Punch class}	& \textbf{precision}	& \textbf{recall}	& \textbf{F1-score} \\
 \midrule
 YT		& 0.94		& 1.00		& 0.97 \\
-MT		& 0.84		& 1.00		& 0.97 \\
-AT		& 0.97		& 0.85		& 0.90 \\
-U		& 0.98		& 1.00		& 0.99 \\
-NP		& 0.97		& 0.89		& 0.93 \\
+MT		& 1.00		& 0.98		& 0.99 \\
+AT		& 0.97		& 0.94		& 0.95 \\
+U		& 0.96		& 1.00		& 0.98 \\
+NP		& 1.00		& 0.92		& 0.96 \\
 \bottomrule
 \end{tabular}
 \end{specialtable}
 
 \begin{figure}[H]
-\includegraphics[width=10.5 cm]{img/4conv_confus.png}
-\caption{2D 4 layer CNN confusion matrix}
-\end{figure} 
+\includegraphics[width=10.5 cm]{img/3conv_confus.png}
+\caption{2D 3 layer CNN confusion matrix}
+\end{figure}
 
-On training history we see much better train and validation accuracy, small loss.
+On training history we see much better train and validation accuracy, small loss. We try more layers, but this do not improve classification metrics
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Discussion}
-Multilayer perceptron is a simple model and good baseline. Best F1 score is 0.95 for U-punch, worst is 0.86 for N-punch. Difference between train and validation accuracy is rusult of model overfiiting.
+Multilayer perceptron is a simple model and good baseline. Best F1 score is 0.95 for U-punch, worst is 0.86 for N-punch. Difference between train and validation accuracy is result of model overfiiting.
 Increasing number of training samples will solve this problem.\\
 1D convolution model from [] work works very bad and not suitable for punch class prediction. Train accuracy is about 0.8, but validation accuracy only 0.65 and very unstable. Worst F1 score is 0.11 for MT-punch, best F1 is 0.81 for No-punch class. Loss after 100 epochs training is only about 0.3.\\
 As we proposed, 2D convolution model with 2 conv layers works better. Metrics are like on mlp: best F1 is 0.93 for YT-punch and worst is 0.90 for U-punch class. A little gap between training and validation accuracy curves is tell about some overfitting, so we tested deeper conv model with 4 layers.\\
-2D convolution model with 4 conv layer shows best result: 0.97 validation accuracy. Best F1-score 0.99 for YT-punch class, worst 0.90 for AT-punch class.\\
-Comparing with MLP, we achieved better classification metrics and shift invariant model, based on 2D convolution. 
+2D convolution model with 3 conv layer shows best result: 0.97 validation accuracy. Best F1-score 0.99 for YT-punch class, worst 0.90 for AT-punch class.\\
+Comparing with MLP, we achieved better classification metrics and shift invariant model, based on 2D convolution.
 
 \section{Conclusions}
-Comparing with classic ML prediction methods, neural nets have a little smaller F1-score, but higher accuracy. 
-
+Comparing with classic ML prediction methods, neural nets have a little smaller F1-score, but higher accuracy.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{6pt} 
+\vspace{6pt}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% optional
@@ -335,7 +328,7 @@ Comparing with classic ML prediction methods, neural nets have a little smaller 
 
 % Only for the journal Methods and Protocols:
 % If you wish to submit a video article, please do so with any other supplementary material.
-% \supplementary{The following are available at \linksupplementary{s1}, Figure S1: title, Table S1: title, Video S1: title. A supporting video article is available at doi: link.} 
+% \supplementary{The following are available at \linksupplementary{s1}, Figure S1: title, Table S1: title, Video S1: title. A supporting video article is available at doi: link.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.'', please turn to the  \href{http://img.mdpi.org/data/contributor-role-instruction.pdf}{CRediT taxonomy} for the term explanation. Authorship must be limited to those who have contributed substantially to the work~reported.}
@@ -346,13 +339,13 @@ Comparing with classic ML prediction methods, neural nets have a little smaller 
 
 \informedconsent{Informed consent was obtained from all subjects involved in the study.}
 
-%\dataavailability{In this section, please provide details regarding where data supporting reported results can be found, including links to publicly archived datasets analyzed or generated during the study. Please refer to suggested Data Availability Statements in section ``MDPI Research Data Policies'' at \url{https://www.mdpi.com/ethics}. You might choose to exclude this statement if the study did not report any data.} 
+%\dataavailability{In this section, please provide details regarding where data supporting reported results can be found, including links to publicly archived datasets analyzed or generated during the study. Please refer to suggested Data Availability Statements in section ``MDPI Research Data Policies'' at \url{https://www.mdpi.com/ethics}. You might choose to exclude this statement if the study did not report any data.}
 
 \acknowledgments{The author would like to thank athletes, coaches, and the leadership of the
 Karate Federation of the Republic of Tatarstan (Kazan, Russia) for organizing the experiments and
 actively participating in the study.}
 
-\conflictsofinterest{The authors declare no conflict of interest.} 
+\conflictsofinterest{The authors declare no conflict of interest.}
 
 %% Optional
 %\sampleavailability{Samples of the compounds ... are available from the authors.}
@@ -364,7 +357,7 @@ actively participating in the study.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
 \abbreviations{The following abbreviations are used in this manuscript:\\
-%\noindent 
+%\noindent
 \begin{tabular}{@{}ll}
 IMU & Inertial Measurement Unit \\
 MLP & Multi-layer Perceptron \\
@@ -404,6 +397,12 @@ Khasanshin, I. Application of an Artificial Neural Network to Automate the Measu
 
 \bibitem[Worsey(2020)]{ref-journal8}
 Worsey, M.T.O.; Espinosa, H.G.; Shepherd, J.B.; Thiel, D.V. An Evaluation of Wearable Inertial Sensor Configuration and Supervised Machine Learning Models for Automatic Punch Classification in Boxing. {\em IoT} {\bf 2020}, {\em 1}, 360–381, doi:10.3390/iot1020021.
+
+\bibitem[stm32(2021)]{ref-url1}
+STM32 overview. Available online: https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html (accessed on April 9, 2021).
+
+\bibitem[stm32(2021)]{ref-url2}
+MPU-6000 product specification. Available online: https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Datasheet1.pdf (accessed on April 9, 2021)
 
 \end{thebibliography}
 
