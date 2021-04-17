@@ -18,7 +18,7 @@
 \datereceived{}
 \dateaccepted{}
 \datepublished{}
-\hreflink{https://doi.org/} % If needed use \linebreak
+%\hreflink{https://doi.org/} % If needed use \linebreak
 %------------------------------------------------------------------
 % The following line should be uncommented if the LaTeX file is uploaded to arXiv.org
 %\pdfoutput=1
@@ -37,10 +37,10 @@
 %\newcommand{\orcidauthorB}{0000-0000-0000-000X} % Add \orcidB{} behind the author's name
 
 % Authors, for the paper (add full first names)
-\Author{Ilshat Khasanshin $^{1}$, Andrey Labintsev $^{2}$ and Dmitry Balashov $^{3}$}
+\Author{Ilshat Khasanshin $^{1}$, Andrey Labintsev $^{2}$ and Dmitri Balashov $^{3}$}
 
 % MDPI internal command: Authors, for metadata in PDF
-\AuthorNames{Ilshat Khasanshin, Andrey Labintsev and Dmitry Balashov}
+\AuthorNames{Ilshat Khasanshin, Andrey Labintsev and Dmitri Balashov}
 
 % MDPI internal command: Authors, for citation in the left column
 \AuthorCitation{Khasanshin, I.; Labintsev, A.; Balashov, D.}
@@ -51,21 +51,30 @@
 $^{1}$ \quad Financial University under the Government of the Russian Federation; iykhasanshin@fa.ru\\
 $^{2}$ \quad Financial University under the Government of the Russian Federation; ailabintsev@fa.ru \\
 $^{3}$ \quad Financial University under the Government of the Russian Federation; dabalashov@fa.ru }
-\abstract{(1) Background: place the question addressed in a broad context and highlight the purpose of the study; (2) Methods: describe briefly the main methods or treatments applied; (3) Results: summarize the article's main findings; (4) Conclusion: indicate the main conclusions or interpretations. The abstract should be an objective representation of the article, it must not contain results which are not presented and substantiated in the main text and should not exaggerate the main conclusions.}
+\abstract{The article analyzes the kinematics of karate punches, investigates the possibility of their classification. To collect data, linear acceleration sensors were used, attached to the fighter's wrists. A simpler approach to feature extraction without calculating their statistical characteristics is proposed. Various convolutional neural network architectures are used to solve the classification problem. As a result, the multiclass accuracy value is 0.96 and the average F1 is 0.97 for five different classes of punches.}
 % Keywords
-\keyword{punch; classification; sensors; neural networks (List three to ten pertinent keywords specific to the article; yet reasonably common within the subject discipline.)}
+\keyword{punch; classification; sensors; neural networks; kinematic analysis}
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-Karate is a traditional Japanese martial art. However, this Japanese martial art has gained popularity all over the world. Sports competitions of national and world level are held in karate. The popularity of karate as a sport is growing, and in this regard, the methods of training karate athletes are increasingly becoming scientific in nature.\\
-To develop effective training techniques, trainers need to understand the kinematics and dynamics of karate punches. Therefore, our research was aimed to analyze the velocity fields of punches in karate, as well as to develop and analyze various models of artificial neural networks for recognizing punches.\\
-To solve the problems of the study, inertial measurement units (IMUs) were used, which included an accelerometer and a gyroscope. IMUs were attached to the wrists of karate athletes. The use of IMUs was due to the fact that in sports and martial arts, they proved to be an effective tool for analyzing the kinematics and biomechanics of human movements \cite{ref-journal1, ref-journal2}.\\
-In \cite{ref-journal3}, studies of the acceleration and speed of punches were carried out using IMUS that were installed on the wrists of boxers. The accelerometers in this study had a large range – 200g (g is the acceleration of gravity = 9.8 m / s2), but the acceleration graphs show that the maximum acceleration was about 25g. In addition, this acceleration corresponded to the final phase of the punch, when the athlete's fist stopped abruptly and this led to a large negative acceleration. This allows us to conclude that for studies of the kinematics of punches in martial arts, it is possible to limit the measurement range to 16-25g. In \cite{ref-journal3}, it was found that the speed of punches in male athletes was 8.1±1.4 m/s for jab-out punches, and 7.7 ± 1.5 m/s for cross-out punches. The women had the following results: 6.6 = 1.6 m / s (job-out), 5.7 = 1.5 m / s (cross-out).\\
-The authors of the work \cite{ref-journal4} investigated the difference between the biomechanics of punches of elite and novice boxers based on IMUs, which in the amount of 17 pieces were installed on the body of boxers. IMUs had an accelerometer measurement limit of 18g, they included an accelerometer, gyroscope, magnetometer. Since the IMUs were installed on each body segment, the contribution of the body segments to the punching technique of boxers was determined. In both groups (elite and novice athletes), the elbow contributed the most to the cross-out technique, and the shoulder contributed the most to the hook and uppercut.\\
-In \cite{ref-journal5}, the analysis of the kinematics of boxers ' punches using accelerometers was carried out in conjunction with videography. The authors [5] searched for the correlation of postures and fields of acceleration of blows with the fatigue of athletes. The graphs of punch accelerations given in [5] show that the maximum values are in the range of 20-40 m / s2, which also allows us to choose an IMU for experiments with a measurement limit of up to 16g. In [5], it is stated that a large number of degrees of freedom of human hands do not allow us to draw unambiguous conclusions about the kinematics of blows, so videography was additionally required. It can be noted that in this work, the magnetometer and gyroscope, which are usually included in the IMU, were not used, perhaps their use could lead to the fact that videography would not was needed.\\
-Also, various techniques of artificial neural networks (ANN) are used to analyze the kinematics of punches in martial arts, which can also help in conditions of lack of data. The advantages of ANN have led to the fact that they are actively used in sports and martial arts \cite{ref-journal6}. For example, the authors \cite{ref-journal3} concluded that according to the accelerometer data, it is difficult to find the time when the boxer's hand begins to return after a punch. It can be assumed that the use of ANN methods can cope with this problem.\\
-In \cite{ref-journal7}, the ANN in the form of a multilayer perceptron was developed for the purpose of automating the data collection of boxers ' punches. The input data for ANN was the IMU data that was attached to the boxers ' wrist. The accuracy of punch recognition ranged from 87.2 ± 5.4 \% to 95.33 ± 2.51\%.\\
-In \cite{ref-journal8}, six different deep machine learning models for recognizing boxers ' punches were investigated. The IMUs were installed in two versions: (1 – the IMUs was attached to both wrists; 2 – the IMUs was attached to both wrists and the third thoracic vertebra). The accuracy of the impact prediction was: for version 1 – 0.90 ± 0.12, for version 2-0.87 ± 0.09. For version 1, the support vector machine (SVM) model worked best (accuracy = 0.96), version 2 – the multi-layer perceptron neural network (MLP-NN) model (accuracy = 0.98).\\
+Karate is a traditional Japanese martial art. However, this Japanese martial art has gained popularity all over the world. Sports competitions of national and world level are held in karate. The popularity of karate as a sport is growing, and in this regard, the methods of training karate athletes are increasingly becoming scientific in nature.
+
+To develop effective training techniques, trainers need to understand the kinematics and dynamics of karate punches. Therefore, our research was aimed to analyze the velocity fields of punches in karate, as well as to develop and analyze various models of artificial neural networks for recognizing punches.
+
+To solve the problems of the study, inertial measurement units (IMUs) were used, which included an accelerometer and a gyroscope. IMUs were attached to the wrists of karate athletes. The use of IMUs was due to the fact that in sports and martial arts, they proved to be an effective tool for analyzing the kinematics and biomechanics of human movements \cite{ref-journal1, ref-journal2}.
+
+In \cite{ref-journal3}, studies of the acceleration and speed of punches were carried out using IMUS that were installed on the wrists of boxers. The accelerometers in this study had a large range – 200g (g is the acceleration of gravity = 9.8 m / s2), but the acceleration graphs show that the maximum acceleration was about 25g. In addition, this acceleration corresponded to the final phase of the punch, when the athlete's fist stopped abruptly and this led to a large negative acceleration. This allows us to conclude that for studies of the kinematics of punches in martial arts, it is possible to limit the measurement range to 16-25g. In \cite{ref-journal3}, it was found that the speed of punches in male athletes was 8.1±1.4 m/s for jab-out punches, and 7.7 ± 1.5 m/s for cross-out punches. The women had the following results: 6.6 = 1.6 m / s (job-out), 5.7 = 1.5 m / s (cross-out).
+
+The authors of the work \cite{ref-journal4} investigated the difference between the biomechanics of punches of elite and novice boxers based on IMUs, which in the amount of 17 pieces were installed on the body of boxers. IMUs had an accelerometer measurement limit of 18g, they included an accelerometer, gyroscope, magnetometer. Since the IMUs were installed on each body segment, the contribution of the body segments to the punching technique of boxers was determined. In both groups (elite and novice athletes), the elbow contributed the most to the cross-out technique, and the shoulder contributed the most to the hook and uppercut.
+
+In \cite{ref-journal5}, the analysis of the kinematics of boxers ' punches using accelerometers was carried out in conjunction with videography. The authors [5] searched for the correlation of postures and fields of acceleration of blows with the fatigue of athletes. The graphs of punch accelerations given in [5] show that the maximum values are in the range of 20-40 m / s2, which also allows us to choose an IMU for experiments with a measurement limit of up to 16g. In [5], it is stated that a large number of degrees of freedom of human hands do not allow us to draw unambiguous conclusions about the kinematics of blows, so videography was additionally required. It can be noted that in this work, the magnetometer and gyroscope, which are usually included in the IMU, were not used, perhaps their use could lead to the fact that videography would not was needed.
+
+Also, various techniques of artificial neural networks (ANN) are used to analyze the kinematics of punches in martial arts, which can also help in conditions of lack of data. The advantages of ANN have led to the fact that they are actively used in sports and martial arts \cite{ref-journal6}. For example, the authors \cite{ref-journal3} concluded that according to the accelerometer data, it is difficult to find the time when the boxer's hand begins to return after a punch. It can be assumed that the use of ANN methods can cope with this problem.
+
+In \cite{ref-journal7}, the ANN in the form of a multilayer perceptron was developed for the purpose of automating the data collection of boxers ' punches. The input data for ANN was the IMU data that was attached to the boxers ' wrist. The accuracy of punch recognition ranged from 87.2 ± 5.4 \% to 95.33 ± 2.51\%.
+
+In \cite{ref-journal8}, six different deep machine learning models for recognizing boxers ' punches were investigated. The IMUs were installed in two versions: (1 – the IMUs was attached to both wrists; 2 – the IMUs was attached to both wrists and the third thoracic vertebra). The accuracy of the impact prediction was: for version 1 – 0.90 ± 0.12, for version 2-0.87 ± 0.09. For version 1, the support vector machine (SVM) model worked best (accuracy = 0.96), version 2 – the multi-layer perceptron neural network (MLP-NN) model (accuracy = 0.98).
+
 Not much work is devoted to the analysis of punches in karate based on IMUs and ANN. And so far, no research has been conducted on a specific karate punch, which is called uraken in Japanese (a punch is made from the inside out).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -83,7 +92,7 @@ The design of the experiment can be seen in Figure 1.
 \end{figure}
 
 On the wrists of the athletes were fixed devices, which included a microcontroller, IMUs, and Bluetooth modules. Athletes punched in shadow fight mode. The IMUs (accelerometer and gyroscope) data was initially transmitted via the Bluetooth channel to the android device. On the android device, the data was saved as files for each type of punch. This data was then processed on the computer. In order to label and identify each punch for develop models of the artificial network, video recordings of the experiments were made.
-The data acquisition device (Figure 2) was a 50x20x10 mm box containing three modules – the microcontroller stm32f103 [9], IMU MPU9250 [10], and Bluetooth module HC-05 with a BC417143 chip [*].
+The data acquisition device (Figure 2) was a 50x20x10 mm box containing three modules – the microcontroller stm32f103\cite{ref-url1}, IMU MPU9250 and Bluetooth module HC-05 with a BC417143 chip \cite{ref-url2}.
 
 \begin{figure}[H]
 \includegraphics[width=10.5 cm]{img/IMU.png}
@@ -309,29 +318,26 @@ On training history we see much better train and validation accuracy, small loss
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Discussion}
-Multilayer perceptron is a simple model and good baseline. Best F1 score is 0.95 for U-punch, worst is 0.86 for N-punch. Difference between train and validation accuracy is result of model overfiiting.
-Increasing number of training samples will solve this problem.\\
-1D convolution model from [] work works very bad and not suitable for punch class prediction. Train accuracy is about 0.8, but validation accuracy only 0.65 and very unstable. Worst F1 score is 0.11 for MT-punch, best F1 is 0.81 for No-punch class. Loss after 100 epochs training is only about 0.3.\\
-As we proposed, 2D convolution model with 2 conv layers works better. Metrics are like on mlp: best F1 is 0.93 for YT-punch and worst is 0.90 for U-punch class. A little gap between training and validation accuracy curves is tell about some overfitting, so we tested deeper conv model with 4 layers.\\
-2D convolution model with 3 conv layer shows best result: 0.97 validation accuracy. Best F1-score 0.99 for YT-punch class, worst 0.90 for AT-punch class.\\
+Multilayer perceptron is a simple model and good baseline. Best F1 score is 0.95 for U-punch, worst is 0.86 for N-punch. Difference between train and validation accuracy is result of model overfiiting.  Increasing number of training samples will solve this problem.
+
+1D convolution model from \cite{ref-journal9} work works very bad and not suitable for punch class prediction. Train accuracy is about 0.8, but validation accuracy only 0.65 and very unstable. Worst F1 score is 0.11 for MT-punch, best F1 is 0.81 for No-punch class. Loss after 100 epochs training is only about 0.3.
+
+As we proposed, 2D convolution model with 2 conv layers works better. Metrics are like on mlp: best F1 is 0.93 for YT-punch and worst is 0.90 for U-punch class. A little gap between training and validation accuracy curves is tell about some overfitting, so we tested deeper conv model with 4 layers.
+
+2D convolution model with 3 conv layer shows best result: 0.97 validation accuracy. Best F1-score 0.99 for YT-punch class, worst 0.90 for AT-punch class.
+
 Comparing with MLP, we achieved better classification metrics and shift invariant model, based on 2D convolution.
 
 \section{Conclusions}
-Comparing with classic ML prediction methods, neural nets have a little smaller F1-score, but higher accuracy.
+
+The best results in the classification of punches in boxing were shown by the machine learning algorithms Linear Regression and Support Vector Machines \cite{ref-journal2}. With it was possible to achieve a multiclass accuracy of 0.96 and an average F1 of about 0.95. In our study, we used convolutional neural networks to classify karate strikes. The best result was shown by a 2D convolutional architecture with three layers, which allowed achieving similar results: 0.96 accuracy and 0.97 average F1.
+Unlike \cite{ref-journal2}, we used a larger dataset - 1700 samples for training and 212 for testing. We used only the results of measuring linear acceleration along the x, y, z axes, did not use measurements of angular acceleration and magnetic field, and did not calculate the angles of the sensor position. We used raw data without statistical processing - we did not calculate the mean, standard deviation, min max, etc.
+We believe that our proposed approach is more suitable for practical implementation and implementation in the final product.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{6pt}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% optional
-%\supplementary{The following are available online at \linksupplementary{s1}, Figure S1: title, Table S1: title, Video S1: title.}
-
-% Only for the journal Methods and Protocols:
-% If you wish to submit a video article, please do so with any other supplementary material.
-% \supplementary{The following are available at \linksupplementary{s1}, Figure S1: title, Table S1: title, Video S1: title. A supporting video article is available at doi: link.}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``Conceptualization, X.X. and Y.Y.; methodology, X.X.; software, X.X.; validation, X.X., Y.Y. and Z.Z.; formal analysis, X.X.; investigation, X.X.; resources, X.X.; data curation, X.X.; writing---original draft preparation, X.X.; writing---review and editing, X.X.; visualization, X.X.; supervision, X.X.; project administration, X.X.; funding acquisition, Y.Y. All authors have read and agreed to the published version of the manuscript.'', please turn to the  \href{http://img.mdpi.org/data/contributor-role-instruction.pdf}{CRediT taxonomy} for the term explanation. Authorship must be limited to those who have contributed substantially to the work~reported.}
 
 \funding{This research received no external funding.}
 
@@ -397,6 +403,9 @@ Khasanshin, I. Application of an Artificial Neural Network to Automate the Measu
 
 \bibitem[Worsey(2020)]{ref-journal8}
 Worsey, M.T.O.; Espinosa, H.G.; Shepherd, J.B.; Thiel, D.V. An Evaluation of Wearable Inertial Sensor Configuration and Supervised Machine Learning Models for Automatic Punch Classification in Boxing. {\em IoT} {\bf 2020}, {\em 1}, 360–381, doi:10.3390/iot1020021.
+
+\bibitem[Wang(2016)]{ref-journal9}
+Wang, Z.; Yan, W.; Oates T. Time Series Classification from Scratch with Deep Neural Networks: A Strong Baseline. {\em cs.LG} {\bf 2016}, {\em 1},  arXiv:1611.06455.
 
 \bibitem[stm32(2021)]{ref-url1}
 STM32 overview. Available online: https://www.st.com/en/microcontrollers-microprocessors/stm32f103.html (accessed on April 9, 2021).
