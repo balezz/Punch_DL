@@ -6,6 +6,9 @@ This repository contains dataset with acceleration sensors measurements and punc
  
  `MoveNet.ipynb` - keypoint extractioin for punch videos. Starting videos availiable [here](https://drive.google.com/drive/folders/1UwZPZ7sqkmQrqbCP1ypquv2UHWkk0bj-?usp=sharing).  
  
+ Build docker image: `docker build -t punch_dl:v1 .`   
+ 
+ 
  TODO:
  - Extract keypoints frame by frame to json files.
  - Add some non-linear features, e.g. angles, distances e.t.c.
