@@ -1,17 +1,29 @@
-# Deep learning models for punch classification in karate  
+# Deep learning models for punch classification in boxing and karate  
 
-This repository contains dataset with acceleration sensors measurements and punch classes.  
+This repository contains data and code with our punch classification experiments. 
+We are using acceleration sensors measurements and video frames for punch class recognition.
 
-`wrist_classification/Reproduce_Results.ipynb` - reproducing classification metric results for article 'Recognition punches in karate using acceleration sensors and convolution neural networks. IEEE Access.  10.1109/ACCESS.2021.3118038'.  
+`DOI_10.1109ACCESS.2021.3118038` - data and code for reproducing classification metric results for article 
+'Recognition punches in karate using acceleration sensors and convolution neural networks.  
  
- `MoveNet.ipynb` - keypoint extractioin for punch videos. Starting videos availiable [here](https://drive.google.com/drive/folders/1UwZPZ7sqkmQrqbCP1ypquv2UHWkk0bj-?usp=sharing).  
+`MoveNetExtractKeypoints.ipynb` - keypoints extraction for punch videos.  
+`SimpleRNN.ipynb` - vanilla RNN as baseline.  
+
+Starting videos availiable [here](https://drive.google.com/drive/folders/1UwZPZ7sqkmQrqbCP1ypquv2UHWkk0bj-?usp=sharing).  
+Box punches classes: 
+0) no punch,
+1) jab, 
+2) cross, 
+3) left hook, 
+4) right hook, 
+5) left uppercut, 
+6) right uppercut.   
+
+Build docker image to reproduce results: `docker build -t punch_dl:v1 .`   
  
- Build docker image: `docker build -t punch_dl:v1 .`   
- 
- 
- TODO:
- - Extract keypoints frame by frame to json files.
- - Add some non-linear features, e.g. angles, distances e.t.c.
- - Label frames to several classes: jab, cross, left hook, right hook, left appercot, right appercot.
- - Experiment with sequentions to punch classification.
+TODO:
+ - [x] Extract keypoints frame by frame to *.npy files.
+ - [ ] Label frames to defined classes.
+ - [ ] Experiment with recurrent models to punch classification.
+ - [ ] Add some advanced features, e.g. angles, distances e.t.c.
  
