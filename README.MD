@@ -30,3 +30,5 @@ TODO:
  - [ ] Experiment with recurrent models to punch classification.
  - [ ] Add some advanced features, e.g. angles, distances e.t.c.
  
+ Links:
+Human Action Recognition for Boxing Training Simulator
