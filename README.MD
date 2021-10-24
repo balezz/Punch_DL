@@ -26,9 +26,14 @@ Build docker image to reproduce results: `docker build -t punch_dl:v1 .`
  
 TODO:
  - [x] Extract keypoints frame by frame to *.npy files.
- - [ ] Label frames to defined classes.
+ - [x] Label frames to defined classes.
  - [ ] Experiment with recurrent models to punch classification.
  - [ ] Add some advanced features, e.g. angles, distances e.t.c.
+ - [ ] Get more videos.
  
- Links:
-Human Action Recognition for Boxing Training Simulator
+ Links:  
+
+Awesome Action Recognition
+https://github.com/jinwchoi/awesome-action-recognition  
+
+Anton Broilovskiy, Makarov I. Human Action Recognition for Boxing Training Simulator. AIST 2020
