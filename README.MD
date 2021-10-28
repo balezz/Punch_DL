@@ -7,7 +7,8 @@ We are using acceleration sensors measurements and video frames for punch class 
 'Recognition punches in karate using acceleration sensors and convolution neural networks.  
  
 `MoveNetExtractKeypoints.ipynb` - keypoints extraction for punch videos.  
-`SimpleRNN.ipynb` - vanilla RNN as baseline.  
+`RNN-LSTM.ipynb` - vanilla RNN as baseline.  
+`LSTM-NormalizeMidPoint.ipynb` - keypoints coordinates normalized to middle point (btw left and right hips).  
 
 Starting videos available [here](https://drive.google.com/drive/folders/1UwZPZ7sqkmQrqbCP1ypquv2UHWkk0bj-?usp=sharing).  
 On each video two man (id0 and id1) have done 10 weak (5 left and 5 right hand) and 10 strong punches. 
