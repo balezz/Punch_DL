@@ -14,16 +14,36 @@ Starting videos available [here](https://drive.google.com/drive/folders/1UwZPZ7s
 On each video two man (id0 and id1) have done 10 weak (5 left and 5 right hand) and 10 strong punches. 
 Total 240 punches in dataset v0.1 We start with only punch class prediction, no power estimation.  
 
-Box punches classes: 
-0) no punch,
-1) jab (jab left), 
-2) cross (jab right), 
-3) left hook, 
-4) right hook, 
-5) left uppercut, 
-6) right uppercut.   
+Box punches classes:
 
-Build docker image to reproduce results: `docker build -t punch_dl:v1 .`   
+0. no punch,
+1. jab (jab left),  
+2. cross (jab right),
+3. left hook, 
+4. right hook, 
+5. left uppercut, 
+6. right uppercut.   
+
+
+## Docker
+
+Build docker
+```
+docker build -t punch_dl:v1 .
+```
+
+Run docker
+```
+docker run -p 8888:8888 -v "$(pwd)":/tf punch_dl:v1
+```
+
+## Other
+
+IF you want to keep google colab 2 spaces indentation in jupyter notebook, please visit:
+https://stackoverflow.com/questions/19068730/how-do-i-change-the-autoindent-to-2-space-in-ipython-notebook
+ 
+
+## TODO
  
 TODO:
  - [x] Extract keypoints frame by frame to *.npy files.
