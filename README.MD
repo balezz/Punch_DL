@@ -10,16 +10,34 @@ We are using acceleration sensors measurements and video frames for punch class 
 `SimpleRNN.ipynb` - vanilla RNN as baseline.  
 
 Starting videos availiable [here](https://drive.google.com/drive/folders/1UwZPZ7sqkmQrqbCP1ypquv2UHWkk0bj-?usp=sharing).  
-Box punches classes: 
-0) no punch,
-1) jab, 
-2) cross, 
-3) left hook, 
-4) right hook, 
-5) left uppercut, 
-6) right uppercut.   
 
-Build docker image to reproduce results: `docker build -t punch_dl:v1 .`   
+Box punches classes:
+
+0. no punch,
+1. jab, 
+2. cross, 
+3. left hook, 
+4. right hook, 
+5. left uppercut, 
+6. right uppercut.   
+
+
+## Docker
+
+Build docker
+```
+docker build -t punch_dl:v1 .
+```
+
+Run docker
+```
+docker run -p 8888:8888 -v "$(pwd)":/tf punch_dl
+```
+
+## Other
+
+IF you want to keep google colab 2 spaces indentation in jupyter notebook, please visit:
+https://stackoverflow.com/questions/19068730/how-do-i-change-the-autoindent-to-2-space-in-ipython-notebook
  
 TODO:
  - [x] Extract keypoints frame by frame to *.npy files.
