@@ -1,2 +1,5 @@
 .ipynb_checkpoints
 data/video/*
+kt_dir*/*
+/lib/__pycache__
+tensorboard_logs/*
