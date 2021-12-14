@@ -75,7 +75,6 @@ pathspec==0.9.0
 pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==8.3.2
-pkg_resources==0.0.0
 platformdirs==2.4.0
 prometheus-client==0.11.0
 prompt-toolkit==3.0.20
@@ -108,7 +107,6 @@ tensorboard==2.6.0
 tensorboard-data-server==0.6.1
 tensorboard-plugin-wit==1.8.0
 tensorflow==2.3.4
-tensorflow-docs==0.0.0.dev0
 tensorflow-estimator==2.3.0
 tensorflow-hub==0.12.0
 termcolor==1.1.0
