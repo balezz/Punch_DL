@@ -43,19 +43,27 @@ def read_data(name, normalize_mp='2D', skip_midpoints=False):
     """ Read numpy array with saved keypoints
 
     Params:
-        name - file name without .npy extension 
+        name - file name with or without .npy extension
         normalize_mp - '3D' to keep scores, '2D' - keep (x,y) only
         skip_midpoints - add or omit midpoint coords
 
     Returns:
         tuple of normalized coords and array of labels
     """
+    name = name[:-4] if '.npy' in name else name
+
+    is_reversed = 'reversed' in name
+
+    if is_reversed:
+        label_name = name.replace('_reversed', '')
+    else:
+        label_name = name
     
-    with open(f'data/labels/{name}') as f:
+    with open(f'data/labels/{label_name}') as f:
         labels = f.readlines()
     
-    N = int(re.findall(r'\d+', labels[0])[0])
     X = np.load(f'data/keypoints/{name}.npy')
+    N = X.shape[0]
     X = X.reshape((N, 17, 3))
     y = np.zeros(N, dtype=int)
     
@@ -76,6 +84,14 @@ def read_data(name, normalize_mp='2D', skip_midpoints=False):
         X = X.reshape(N, 51)
         
     print(X.shape)
+
+    if reversed:
+        # change right and left punch labels to correctly label mirrored videos
+        unique = [i for i in np.unique(y) if i != 0]
+        max_val = max(unique)
+        y[y != 0] = y[y != 0] + 1
+        y[y == max_val + 1] = y[y == max_val + 1] - 2
+
     return X, y
 
 
