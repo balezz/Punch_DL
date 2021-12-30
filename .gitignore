@@ -1,6 +1,7 @@
 .ipynb_checkpoints
 .idea/*
+imgs/*
 data/video/*
 kt_dir*/*
-/lib/__pycache__
+__pycache__/*
 tensorboard_logs/*
