@@ -5,3 +5,4 @@ data/video/*
 kt_dir*/*
 __pycache__/*
 tensorboard_logs/*
+checkpoints/*
