@@ -1,8 +1,7 @@
 .ipynb_checkpoints
 .idea/*
-imgs/*
+.vscode/*
 data/video/*
-kt_dir*/*
 __pycache__/*
-tensorboard_logs/*
 checkpoints/*
+kt_dir/*
