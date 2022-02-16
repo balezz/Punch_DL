@@ -1,6 +1,5 @@
 import numpy as np
 import os
-import random
 import re
 
 
@@ -53,7 +52,7 @@ labels_reversed = reverse_labels(labels.copy())
 assert np.sum(np.abs(labels - labels_reversed)) == np.sum(labels != 0)
 
 
-def read_data(name, skip_midpoints=False, preprocess_data=None):
+def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False):
     """ Read numpy array with saved keypoints
 
     Params:
@@ -81,22 +80,31 @@ def read_data(name, skip_midpoints=False, preprocess_data=None):
     X = X.reshape((N, 17, 3))
     y = np.zeros(N, dtype=int)
     
+    # first two lines label weak punches
+    # next two lines label strong punches
+    punch_line_num = 0
+    
     for lab in labels:
         C = re.findall(r'\d:', lab)
 
         if len(C) == 1:
-            C = int(C[0][0])
+            C = int(C[0][0])  # label
+            if all_labels and punch_line_num > 1:
+                C = C + 6  # strong punches labels = weak punches label + 6
+
             idxs = re.findall(r'\d+-\d+', lab)
             for idx in idxs:
                 start, stop = idx.split('-')
                 y[int(start): int(stop)] = C
+            
+            punch_line_num = punch_line_num + 1
 
     if preprocess_data:
         X = preprocess_data(X)
 
     X = normalize_mid_points(X, skip_midpoints)
         
-    print(label_name, f'reversed: {is_reversed}', f'data shape: ({X.shape[0]}, {X.shape[1]})')
+    print(label_name, f'reversed: {is_reversed}', f'data shape: ({X.shape[0]}, {X.shape[1]})', sep='|')
     print('-' * 20)
 
     if reversed:
