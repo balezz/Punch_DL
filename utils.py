@@ -89,6 +89,7 @@ def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False
 
         if len(C) == 1:
             C = int(C[0][0])  # label
+
             if all_labels and punch_line_num > 1:
                 C = C + 6  # strong punches labels = weak punches label + 6
 
@@ -99,10 +100,10 @@ def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False
             
             punch_line_num = punch_line_num + 1
 
+    X = normalize_mid_points(X, skip_midpoints)
+    
     if preprocess_data:
         X = preprocess_data(X)
-
-    X = normalize_mid_points(X, skip_midpoints)
         
     print(label_name, f'reversed: {is_reversed}', f'data shape: ({X.shape[0]}, {X.shape[1]})', sep='|')
     print('-' * 20)
@@ -113,7 +114,7 @@ def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False
     return X, y
 
 
-def get_train_data(skip_midpoints=False, preprocess_data=None):
+def get_train_data(skip_midpoints=False, preprocess_data=None, all_labels=False):
     """ Get data for training and testing
     
     Returns:
@@ -138,7 +139,7 @@ def get_train_data(skip_midpoints=False, preprocess_data=None):
 
     for labels in labels_by_punch_types:
         for label in labels:
-            X, y = read_data(label, skip_midpoints, preprocess_data)
+            X, y = read_data(label, skip_midpoints, preprocess_data, all_labels)
             X_train_list.append(X)
             y_train_list.append(y)
 

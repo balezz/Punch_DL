@@ -10,15 +10,25 @@ import tensorflow as tf
 from pathlib import PurePath
 from tqdm import tqdm
 
+from utils import normalize_mid_points
+
 
 LABELS = [
     'no punch',
-    'left jab',
-    'right jab',
-    'left hook',
-    'right hook',
-    'left uper',
-    'right uper'
+
+    'left jab weak',
+    'right jab weak',
+    'left hook weak',
+    'right hook weak',
+    'left uper weak',
+    'right uper weak'
+    
+    'left jab strong',
+    'right jab strong',
+    'left hook strong',
+    'right hook strong',
+    'left uper strong',
+    'right uper strong'
 ]
 
 KEYPOINT_DICT = {
@@ -90,54 +100,17 @@ def get_punch_classifier_interpreter(model_path=PurePath('models', 'models/model
     return punch_classifier_interpreter
 
 
-def movenet(interpreter, input_image):
-    """Runs movenet model"""
+def get_interpreter_results(interpreter, inputs):
+    """Runs interpreter"""
     # TF Lite format expects tensor type of uint8.
-    input_image = tf.cast(input_image, dtype=tf.uint8)
+    inputs = tf.cast(inputs, dtype=tf.uint8)
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
-    interpreter.set_tensor(input_details[0]["index"], input_image.numpy())
+    interpreter.set_tensor(input_details[0]["index"], inputs.numpy())
     # Invoke inference.
     interpreter.invoke()
     # Get the model prediction.
-    keypoints_with_scores = interpreter.get_tensor(output_details[0]["index"])
-    return keypoints_with_scores
-
-
-def punch_classifier(interpreter, buffer):
-    """Runs punch classifier model"""
-    buffer = buffer.reshape(1, 30, 36)
-    # TF Lite format expects tensor type of float32.
-    buffer = tf.cast(buffer, dtype=tf.float32)
-    input_details = interpreter.get_input_details()
-    output_details = interpreter.get_output_details()
-    interpreter.set_tensor(input_details[0]["index"], buffer.numpy())
-    # Invoke inference.
-    interpreter.invoke()
-    # Get the model prediction.
-    predictions = interpreter.get_tensor(output_details[0]["index"])
-    return predictions
-
-
-def normalize_mid_points(X):
-    """Calculate middle point between two hips
-        and substract this point from other coordinates
-
-    Params:
-        X - array of shape (Frames, KeyPoints, Dim),
-            Frames - number of extracted video frames,
-            KeyPoints = 17
-            Dim = 3 (x, y, score)
-
-    Returns:
-        normalized coords
-    """
-    left_hip, right_hip = 11, 12
-    N = X.shape[0]
-    mid_points = (X[:, left_hip, :] + X[:, right_hip, :]) / 2
-    mp = mid_points.reshape(N, 1, 3)
-    x_n = X - mp
-    return np.concatenate([x_n[:, :, :2], mp[:, :, :2]], axis=1).reshape(N, 36)
+    return interpreter.get_tensor(output_details[0]["index"])
 
 
 def init_crop_region(image_height, image_width):
@@ -352,7 +325,7 @@ def main(device, debug, model):
     while cap.isOpened():
         keypoints_with_scores = run_inference(
             movenet_interpreter,
-            movenet,
+            get_interpreter_results,
             frame,
             crop_region,
             crop_size=[INPUT_SIZE, INPUT_SIZE]
@@ -369,7 +342,7 @@ def main(device, debug, model):
             pass
 
         if len(buffer) >= 30:
-            label_scores = punch_classifier(
+            label_scores = get_interpreter_results(
                         punch_classifier_interpreter,
                         normalize_mid_points(np.array(buffer[-30:])))[0][-1]
             prediction = np.argmax(label_scores)
