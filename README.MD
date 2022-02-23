@@ -48,8 +48,9 @@ https://stackoverflow.com/questions/19068730/how-do-i-change-the-autoindent-to-2
 TODO:
  - [x] Extract keypoints frame by frame to *.npy files.
  - [x] Label frames to defined classes.
- - [ ] Experiment with recurrent models to punch classification.
- - [ ] Add some advanced features, e.g. angles, distances e.t.c.
+ - [x] Experiment with recurrent models to punch classification.
+ - [x] Add some advanced features, e.g. angles, distances e.t.c.
+ - [ ] Experiment with convolution models to punch classification.
  - [ ] Get more videos.
  
  Links:  
