@@ -11,16 +11,14 @@ if __name__ == '__main__':
     TEST_CASES = 10
 
     time_steps = 30
-    keypoints = 24
+    keypoints = 36
     X_val = np.random.random((time_steps * TEST_CASES, keypoints)).astype('float32')
 
     converter = tf.lite.TFLiteConverter.from_keras_model(model)
-    converter.inference_input_type = tf.float32
     converter.target_spec.supported_ops = [
         tf.lite.OpsSet.TFLITE_BUILTINS,  # enable TensorFlow Lite ops.
         tf.lite.OpsSet.SELECT_TF_OPS  # enable TensorFlow ops.
     ]
-    converter.target_spec.supported_types = [tf.lite.constants.FLOAT64]
     tflite_model = converter.convert()
 
     # Run the model with TensorFlow to get expected results.
@@ -47,7 +45,7 @@ if __name__ == '__main__':
         # Clean up internal states.
         interpreter.reset_all_variables()
 
-    # # If everythins is ok, then save tflite model.
-    # print('tests passed...')
-    # with open('models/model.tflite', 'wb') as f:
-    #     f.write(tflite_model)
+    # If everythins is ok, then save tflite model.
+    print('tests passed...')
+    with open('models/model.tflite', 'wb') as f:
+        f.write(tflite_model)
