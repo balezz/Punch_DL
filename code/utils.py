@@ -2,6 +2,13 @@ import numpy as np
 import os
 import re
 
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+print(f'BASE_DIR: {BASE_DIR}')
+DATA_DIR = BASE_DIR.joinpath('data')
+
 
 def normalize_mid_points(X, skip_midpoints=False):
     """Calculate middle point between two hips
@@ -71,14 +78,25 @@ def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False
         label_name = name.replace('_reversed', '')
     else:
         label_name = name
-    
-    with open(f'data/labels/{label_name}') as f:
+
+    with open(DATA_DIR.joinpath('labels', label_name)) as f:
         labels = f.readlines()
-    
-    X = np.load(f'data/keypoints/{name}.npy')
+
+    X = np.load(DATA_DIR.joinpath('keypoints', f'{name}.npy'))
     N = X.shape[0]
     X = X.reshape((N, 17, 3))
     y = np.zeros(N, dtype=int)
+
+    """
+    id2_hook_1 - all hooks are bad
+    id3_hook_1 - all hooks are bad
+    id3_hook_2 - all hooks are bad
+    id3_jab_1 - all jabs are bad
+    """
+    all_punches_are_bad = False
+
+    if name in ['id2_hook_1', 'id3_hook_1', 'id3_hook_2', 'id3_jab_1']:
+        all_punches_are_bad = True
     
     # first two lines label weak punches
     # next two lines label strong punches
@@ -90,7 +108,7 @@ def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False
         if len(C) == 1:
             C = int(C[0][0])  # label
 
-            if all_labels and punch_line_num > 1:
+            if all_labels and all_punches_are_bad and punch_line_num > 1:
                 C = C + 6  # strong punches labels = weak punches label + 6
 
             idxs = re.findall(r'\d+-\d+', lab)
@@ -120,8 +138,7 @@ def get_train_data(skip_midpoints=False, preprocess_data=None, all_labels=False)
     Returns:
         X_train, y_train, X_test, y_test
     """
-    labels = os.listdir('data/labels')
-
+    labels = os.listdir(DATA_DIR.joinpath('labels'))
     labels_by_punch_types = [[], [], []]
 
     # sort labels so that hooks go first, then jabs, then upers

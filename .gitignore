@@ -2,6 +2,6 @@
 .idea/*
 .vscode/*
 data/video/*
-__pycache__/*
+**/__pycache__/*
 checkpoints/*
 kt_dir/*
