@@ -29,12 +29,12 @@ Box punches classes:
 
 Build docker
 ```
-docker build -t punch_dl:v1 .
+docker build -t punch_dl:v2 .
 ```
 
 Run docker
 ```
-docker run -p 8888:8888 -v "$(pwd)":/tf punch_dl:v1
+docker run -p 8888:8888 -v "$(pwd)":/tf punch_dl:v2
 ```
 
 ## Other
