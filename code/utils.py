@@ -54,13 +54,14 @@ labels_reversed = reverse_labels(labels.copy())
 assert np.sum(np.abs(labels - labels_reversed)) == np.sum(labels != 0)
 
 
-def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False):
+def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False, verbose=False):
     """ Read numpy array with saved keypoints
 
     Params:
         name - file name with or without .npy extension
-        normalize_mp - '3D' to keep scores, '2D' - keep (x,y) only
         skip_midpoints - add or omit midpoint coords
+        preprocess_data -
+        all_labels -
 
     Returns:
         tuple of normalized coords and array of labels
@@ -106,9 +107,10 @@ def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False
     
     if preprocess_data:
         X = preprocess_data(X)
-        
-    print(label_name, f'reversed: {is_reversed}', f'data shape: ({X.shape[0]}, {X.shape[1]})', sep='|')
-    print('-' * 20)
+
+    if verbose:
+        print(label_name, f'reversed: {is_reversed}', f'data shape: ({X.shape[0]}, {X.shape[1]})', sep='|')
+        print('-' * 20)
 
     if reversed:
         y = reverse_labels(y)
