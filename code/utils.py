@@ -2,6 +2,8 @@ import numpy as np
 import os
 import re
 
+DATA = '../data'
+
 
 def normalize_mid_points(X, skip_midpoints=False):
     """Calculate middle point between two hips
@@ -72,10 +74,10 @@ def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False
     else:
         label_name = name
     
-    with open(f'data/labels/{label_name}') as f:
+    with open(f'{DATA}/labels/{label_name}') as f:
         labels = f.readlines()
     
-    X = np.load(f'data/keypoints/{name}.npy')
+    X = np.load(f'{DATA}/keypoints/{name}.npy')
     N = X.shape[0]
     X = X.reshape((N, 17, 3))
     y = np.zeros(N, dtype=int)
@@ -120,7 +122,7 @@ def get_train_data(skip_midpoints=False, preprocess_data=None, all_labels=False)
     Returns:
         X_train, y_train, X_test, y_test
     """
-    labels = os.listdir('data/labels')
+    labels = os.listdir(f'{DATA}/labels')
 
     labels_by_punch_types = [[], [], []]
 
