@@ -3,19 +3,21 @@
 This repository contains data and code with our punch classification experiments. 
 We are using acceleration sensors measurements and video frames for punch class recognition.
 
-`DOI_10.1109ACCESS.2021.3118038` - data and code for reproducing classification metric results for article 
-'Recognition punches in karate using acceleration sensors and convolution neural networks.  
- 
-`MoveNetExtractKeypoints.ipynb` - keypoints extraction for punch videos.  
-`RNN-LSTM.ipynb` - vanilla RNN as baseline.  
-`LSTM-NormalizeMidPoint.ipynb` - keypoints coordinates normalized to middle point (btw left and right hips).  
+`DOI_10.1109ACCESS.2021.3118038` directory contains data and code for reproducing classification metric results for article 
+'Recognition punches in karate using acceleration sensors and convolution neural networks'.  
+
+`code` directory contains:  
+- `MoveNetExtractKeypoints.ipynb` - keypoints extraction for punch videos. Save it to `data/keypoints`  
+- `RNN-LSTM-GRU.ipynb` - vanilla RNN as baseline.  
+- `GRU-NormalizeMidPoint.ipynb` - keypoints coordinates normalized to middle point (btw left and right hips).  
+
+`models` directory contains training results keras and tflite models.  
 
 Starting videos available [here](https://drive.google.com/drive/folders/1UwZPZ7sqkmQrqbCP1ypquv2UHWkk0bj-?usp=sharing).  
-On each video two man (id0 and id1) have done 10 weak (5 left and 5 right hand) and 10 strong punches. 
+On each video man with unique id have done 10 weak (5 left and 5 right hand) and 10 strong punches. 
 Total 240 punches in dataset v0.1 We start with only punch class prediction, no power estimation.  
 
-Box punches classes:
-
+Box punches classes:  
 0. no punch,
 1. jab (jab left),  
 2. cross (jab right),
@@ -23,7 +25,7 @@ Box punches classes:
 4. right hook, 
 5. left uppercut, 
 6. right uppercut.   
-
+7. jab (jab left) strong, etc.  
 
 ## Docker
 
@@ -55,7 +57,5 @@ TODO:
  
  Links:  
 
-Awesome Action Recognition
+Awesome Action Recognition  
 https://github.com/jinwchoi/awesome-action-recognition  
-
-Anton Broilovskiy, Makarov I. Human Action Recognition for Boxing Training Simulator. AIST 2020
