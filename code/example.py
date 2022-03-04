@@ -21,7 +21,7 @@ LABELS = [
     'left hook weak',
     'right hook weak',
     'left uper weak',
-    'right uper weak'
+    'right uper weak',
     
     'left jab strong',
     'right jab strong',

@@ -53,12 +53,6 @@ def reverse_labels(labels):
     return labels
 
 
-# check that if video was reversed, labels were reversed as well
-labels = np.array([0, 4, 5, 4, 4, 0, 0])
-labels_reversed = reverse_labels(labels.copy())
-assert np.sum(np.abs(labels - labels_reversed)) == np.sum(labels != 0)
-
-
 def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False):
     """ Read numpy array with saved keypoints
 
@@ -103,12 +97,12 @@ def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False
     punch_line_num = 0
     
     for lab in labels:
-        C = re.findall(r'\d:', lab)
+        nums = re.findall(r'\d:', lab)
 
-        if len(C) == 1:
-            C = int(C[0][0])  # label
+        if len(nums) == 1:
+            C = int(nums[0][0])  # label
 
-            if all_labels and all_punches_are_bad and punch_line_num > 1:
+            if all_labels and not all_punches_are_bad and punch_line_num > 1:
                 C = C + 6  # strong punches labels = weak punches label + 6
 
             idxs = re.findall(r'\d+-\d+', lab)
@@ -123,23 +117,42 @@ def read_data(name, skip_midpoints=False, preprocess_data=None, all_labels=False
     if preprocess_data:
         X = preprocess_data(X)
         
-    print(label_name, f'reversed: {is_reversed}', f'data shape: ({X.shape[0]}, {X.shape[1]})', sep='|')
+    print(label_name, f'reversed: {is_reversed}', f'data shape: ({X.shape[0]}, {X.shape[1]})', sep=' | ')
     print('-' * 20)
 
-    if reversed:
+    if is_reversed:
         y = reverse_labels(y)
         
     return X, y
 
 
 def get_train_data(skip_midpoints=False, preprocess_data=None, all_labels=False):
-    """ Get data for training and testing
+    """ Get data for training and validation
     
     Returns:
-        X_train, y_train, X_test, y_test
+        X_train, y_train, X_val, y_val
     """
     labels = os.listdir(DATA_DIR.joinpath('labels'))
     labels_by_punch_types = [[], [], []]
+
+    val_labels = [
+        'i1_hook_2',
+        'id4_hook_2',
+
+        'id0_jab_2',
+        'id2_jab_2',
+        'id4_jab_2',
+        
+        'id2_uper_2',
+        'id3_uper_2',
+        'id4_uper_2'
+    ]
+
+    print('validation files')
+    for val_label in val_labels:
+        print(val_label)
+    print('=' * 20)
+    print()
 
     # sort labels so that hooks go first, then jabs, then upers
     # significantly improves model accuracy
@@ -153,14 +166,39 @@ def get_train_data(skip_midpoints=False, preprocess_data=None, all_labels=False)
 
     X_train_list = []
     y_train_list = []
+    
+    X_val_list = []
+    y_val_list = []
 
     for labels in labels_by_punch_types:
         for label in labels:
             X, y = read_data(label, skip_midpoints, preprocess_data, all_labels)
-            X_train_list.append(X)
-            y_train_list.append(y)
+
+            if label in val_labels:
+                X_val_list.append(X)
+                y_val_list.append(y)
+            else:
+                X_train_list.append(X)
+                y_train_list.append(y)
 
     X_train = np.concatenate(X_train_list)
     y_train = np.concatenate(y_train_list)
     
-    return X_train, y_train
+    X_val = np.concatenate(X_val_list)
+    y_val = np.concatenate(y_val_list)
+    
+    return X_train, y_train, X_val, y_val
+
+
+if __name__ == "__main__":
+    # check that if video was reversed, labels were reversed as well
+    labels = np.array([0, 4, 5, 4, 4, 0, 0])
+    labels_reversed = reverse_labels(labels.copy())
+    assert np.sum(np.abs(labels - labels_reversed)) == np.sum(labels != 0)
+
+    # check that all labels were correctly processed
+    X_train, y_train, X_val, y_val = get_train_data(all_labels=False)
+    np.testing.assert_array_equal(np.unique(y_train), np.array([i for i in range(7)]))
+
+    X_train, y_train, X_val, y_val = get_train_data(all_labels=True)
+    np.testing.assert_array_equal(np.unique(y_train), np.array([i for i in range(13)]))
