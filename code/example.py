@@ -1,5 +1,6 @@
 import click
 import cv2 as cv
+import tensorflow.keras as K
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -10,7 +11,7 @@ import tensorflow as tf
 from pathlib import PurePath
 from tqdm import tqdm
 
-from utils import normalize_mid_points
+from utils import normalize_mid_points, BASE_DIR
 
 
 LABELS = [
@@ -51,6 +52,34 @@ KEYPOINT_DICT = {
     'right_ankle': 16
 }
 
+# Maps bones to a matplotlib color name.
+KEYPOINT_EDGE_INDS_TO_COLOR = {
+    (0, 1): 'm',
+    (0, 2): 'c',
+    (1, 3): 'm',
+    (2, 4): 'c',
+    (0, 5): 'm',
+    (0, 6): 'c',
+    (5, 7): 'm',
+    (7, 9): 'm',
+    (6, 8): 'c',
+    (8, 10): 'c',
+    (5, 6): 'y',
+    (5, 11): 'm',
+    (6, 12): 'c',
+    (11, 12): 'y',
+    (11, 13): 'm',
+    (13, 15): 'm',
+    (12, 14): 'c',
+    (14, 16): 'c'
+}
+
+COLOR_MAP = {
+    'm': (255, 0, 255),
+    'c': (0, 255, 255),
+    'y': (255, 255, 0)
+}
+
 
 INPUT_SIZE = 192
 
@@ -74,30 +103,28 @@ def download_file(url, filename):
 def get_movenet_interpreter():
     """Downloads, initializes and returns movenet model interpreter"""
     # check if tflite model is available
-    if not os.path.exists('movenet_model.tflite'):
+    if not os.path.exists(BASE_DIR.joinpath('models', 'movenet_model.tflite')):
         url = 'https://tfhub.dev/google/lite-model/movenet/singlepose/lightning/tflite/float16/4?lite-format=tflite'
         print('movenet model not found')
         print(f'start downloading model from {url}')
-        download_file(url, 'movenet_model.tflite')
+        download_file(url, BASE_DIR.joinpath('models', 'movenet_model.tflite'))
 
     # Initialize movenet model
-    interpreter = tf.lite.Interpreter(model_path="movenet_model.tflite")
+    interpreter = tf.lite.Interpreter(model_path=BASE_DIR.joinpath('models', 'movenet_model.tflite').__str__())
     interpreter.allocate_tensors()
     return interpreter
 
 
 def remove_movenet_model():
     """Deletes movenet model"""
-    if os.path.exists('movenet_model.tflite'):
-        os.remove('movenet_model.tflite')
+    if os.path.exists(BASE_DIR.joinpath('models', 'movenet_model.tflite')):
+        os.remove(BASE_DIR.joinpath('models', 'movenet_model.tflite'))
 
 
-def get_punch_classifier_interpreter(model_path=PurePath('models', 'models/model.tflite').__str__()):
+def get_punch_classifier_model(model_path):
     """Initializes and returns punch classifier model interpreter"""
     # Initialize punch classifier model
-    punch_classifier_interpreter = tf.lite.Interpreter(model_path=model_path)
-    punch_classifier_interpreter.allocate_tensors()
-    return punch_classifier_interpreter
+    return K.models.load_model(model_path)
 
 
 def get_interpreter_results(interpreter, inputs):
@@ -291,6 +318,84 @@ def run_inference(interpreter, movenet, image, crop_region, crop_size):
     return keypoints_with_scores
 
 
+def _keypoints_and_edges_for_display(keypoints_with_scores,
+                                     height,
+                                     width,
+                                     keypoint_threshold=0.11):
+    """Returns high confidence keypoints and edges for visualization.
+    Args:
+    keypoints_with_scores: A numpy array with shape [1, 1, 17, 3] representing
+      the keypoint coordinates and scores returned from the MoveNet model.
+    height: height of the image in pixels.
+    width: width of the image in pixels.
+    keypoint_threshold: minimum confidence score for a keypoint to be
+      visualized.
+    Returns:
+    A (keypoints_xy, edges_xy, edge_colors) containing:
+      * the coordinates of all keypoints of all detected entities;
+      * the coordinates of all skeleton edges of all detected entities;
+      * the colors in which the edges should be plotted.
+    """
+    keypoints_all = []
+    keypoint_edges_all = []
+    edge_colors = []
+
+    num_instances, _, _, _ = keypoints_with_scores.shape
+
+    for idx in range(num_instances):
+        kpts_x = keypoints_with_scores[0, idx, :, 1]
+        kpts_y = keypoints_with_scores[0, idx, :, 0]
+        kpts_scores = keypoints_with_scores[0, idx, :, 2]
+        kpts_absolute_xy = np.stack([width * np.array(kpts_x), height * np.array(kpts_y)], axis=-1)
+        kpts_above_thresh_absolute = kpts_absolute_xy[kpts_scores > keypoint_threshold, :]
+        keypoints_all.append(kpts_above_thresh_absolute)
+
+    for edge_pair, color in KEYPOINT_EDGE_INDS_TO_COLOR.items():
+        if kpts_scores[edge_pair[0]] > keypoint_threshold and kpts_scores[edge_pair[1]] > keypoint_threshold:
+            x_start = kpts_absolute_xy[edge_pair[0], 0]
+            y_start = kpts_absolute_xy[edge_pair[0], 1]
+            x_end = kpts_absolute_xy[edge_pair[1], 0]
+            y_end = kpts_absolute_xy[edge_pair[1], 1]
+            line_seg = np.array([[x_start, y_start], [x_end, y_end]])
+            keypoint_edges_all.append(line_seg)
+            edge_colors.append(color)
+
+    if keypoints_all:
+        keypoints_xy = np.concatenate(keypoints_all, axis=0)
+    else:
+        keypoints_xy = np.zeros((0, 17, 2))
+
+    if keypoint_edges_all:
+        edges_xy = np.stack(keypoint_edges_all, axis=0)
+    else:
+        edges_xy = np.zeros((0, 2, 2))
+    return keypoints_xy, edges_xy, edge_colors
+
+
+def draw_keypoints(frame, keypoints):
+    height, width, _ = frame.shape
+
+    points, edges, edge_colors = _keypoints_and_edges_for_display(keypoints, height, width)
+
+    # draw points
+    for p in points:
+        px, py = p
+        cv.circle(frame, (int(px), int(py)), 4, (0, 255, 0), -1)
+
+    # draw edges
+    for e, c in zip(edges, edge_colors):
+        ex1, ey1 = e[0]
+        ex2, ey2 = e[1]
+
+        cv.line(frame, (int(ex1), int(ey1)), (int(ex2), int(ey2)), COLOR_MAP[c], 1)
+
+
+def get_mode(x):
+    vals, counts = np.unique(x, return_counts=True)
+    index = np.argmax(counts)
+    return vals[index]
+
+
 def generate_histogram(predictions):
     """Generates histogram from predictions to visualize results of running the model"""
     # enable seaborn theming
@@ -304,14 +409,14 @@ def generate_histogram(predictions):
 
 @click.command()
 @click.option('--device', default=0, help='Device to capture video from (in case you have more than one)')
-@click.option('--debug', default=False, help='Enable debug')
-@click.option('--model', default=PurePath('models', 'model.tflite').__str__(), help='Model to test')
+@click.option('--debug', is_flag=True, help='Enable debug')
+@click.option('--model', default=PurePath('models', 'lstm_test_model').__str__(), help='Model to test')
 def main(device, debug, model):
     if debug:
         print('debug is on')
 
     movenet_interpreter = get_movenet_interpreter()
-    punch_classifier_interpreter = get_punch_classifier_interpreter(model)
+    punch_classifier_model = get_punch_classifier_model(model)
 
     cap = cv.VideoCapture(device)
     buffer = []
@@ -339,13 +444,13 @@ def main(device, debug, model):
 
         if debug:
             # visualize keypoints and give more info on model predictions
-            pass
+            draw_keypoints(frame, keypoints_with_scores)
 
-        if len(buffer) >= 30:
-            label_scores = get_interpreter_results(
-                        punch_classifier_interpreter,
-                        normalize_mid_points(np.array(buffer[-30:])))[0][-1]
-            prediction = np.argmax(label_scores)
+        if len(buffer) >= 120:
+            buffer = buffer[-120:]
+            punch_classifier_inputs = normalize_mid_points(np.array(buffer), skip_midpoints=True).reshape(4, 30, 34)
+            label_scores = punch_classifier_model.predict(punch_classifier_inputs)[-1][-10:]  # get last 10 predictions
+            prediction = get_mode(np.argmax(label_scores, axis=1))  # take mode of the last 10 predictions
             predictions.append(prediction)
             cv.putText(frame,
                        LABELS[prediction],
@@ -361,9 +466,10 @@ def main(device, debug, model):
         if cv.waitKey(20) & 0xFF == ord('q'):
             break
 
+    # remove_movenet_model()
     generate_histogram(predictions)
-    remove_movenet_model()
 
 
 if __name__ == '__main__':
-    main()
+    predictions = main()
+
