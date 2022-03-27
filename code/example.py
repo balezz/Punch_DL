@@ -1,4 +1,5 @@
 import click
+import cv2
 import cv2 as cv
 import tensorflow.keras as K
 import matplotlib.pyplot as plt
@@ -445,6 +446,9 @@ def main(device, debug, model):
         if debug:
             # visualize keypoints and give more info on model predictions
             draw_keypoints(frame, keypoints_with_scores)
+
+        # flip frame
+        frame = cv2.flip(frame, 1)
 
         if len(buffer) >= 120:
             buffer = buffer[-120:]
